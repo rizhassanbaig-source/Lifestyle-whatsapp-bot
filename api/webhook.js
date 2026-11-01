@@ -1,13 +1,16 @@
-module.exports = (req, res) => {
+export default function handler(req, res) {
   if (req.method === 'GET') {
-    if (req.query['hub.verify_token'] === 'lifestyle123') {
-      return res.status(200).send(req.query['hub.challenge']);
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
+    if (mode === 'subscribe' && token === 'lifestyle123') {
+      return res.status(200).send(challenge);
     } else {
       return res.status(403).send('Forbidden');
     }
   }
   if (req.method === 'POST') {
-    return res.status(200).send('EVENT_RECEIVED');
+    return res.status(200).send('OK');
   }
   return res.status(200).send('OK');
-};
+}
