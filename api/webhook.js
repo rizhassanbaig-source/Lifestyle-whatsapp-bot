@@ -1,13 +1,13 @@
-module.exports = async (req, res) => {
-  const VERIFY_TOKEN = process.env.VERIFY_TOKEN || 'lifestyle123';
+module.exports = (req, res) => {
   if (req.method === 'GET') {
-    const mode = req.query['hub.mode'];
-    const token = req.query['hub.verify_token'];
-    const challenge = req.query['hub.challenge'];
-    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-      return res.status(200).send(challenge);
+    if (req.query['hub.verify_token'] === 'lifestyle123') {
+      return res.status(200).send(req.query['hub.challenge']);
+    } else {
+      return res.status(403).send('Forbidden');
     }
-    return res.status(403).send('Forbidden');
+  }
+  if (req.method === 'POST') {
+    return res.status(200).send('EVENT_RECEIVED');
   }
   return res.status(200).send('OK');
 };
